@@ -9,18 +9,28 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.chatter.feature.auth.signin.SignInScreen
 import com.example.chatter.feature.auth.signup.SignUpScreen
+import com.example.chatter.feature.home.HomeScreen
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+
+
 
 @Composable
 fun MainApp() {
     Surface(modifier = Modifier.fillMaxSize()) {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = "login") {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val start = if (currentUser != null) "home" else "login"
+        NavHost(navController = navController, startDestination = start) {
 
             composable("login") {
                 SignInScreen(navController)
             }
             composable("signup") {
                 SignUpScreen(navController)
+            }
+            composable("home") {
+                HomeScreen(navController)
             }
         }
     }
